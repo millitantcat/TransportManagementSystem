@@ -1,0 +1,26 @@
+name: CI
+
+on:
+  push:
+    branches: [develop, 'feature/**']
+  pull_request:
+
+jobs:
+  tests:
+    runs-on: ubuntu-latest
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-python@v5
+        with:
+          python-version: '3.12'
+
+      - run: pip install -r requirements.txt
+
+      - run: pytest --junitxml=test_results.xml
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: test-results
+          path: test_results.xml
